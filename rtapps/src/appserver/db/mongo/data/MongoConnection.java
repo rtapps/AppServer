@@ -1,4 +1,4 @@
-package db.mongo;
+package appserver.db.mongo.data;
 
 
 import com.mongodb.MongoClient;
