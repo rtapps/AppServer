@@ -30,22 +30,12 @@ public class TestServlet {
 
 	@RequestMapping("/test")
 	@ResponseBody
-	public String greeting(@RequestParam(value = "name", required = false, defaultValue = "World") String name,
+	public List<AdminUser> test(@RequestParam(value = "name", required = false, defaultValue = "World") String name,
 			Model model) {
 		
-		
 		 List<AdminUser> userList = adminUserReposiroty.findByFirstName("Tzachi");
-		 
-		 
-		 String s = "";
-		 
-		 for (int i=0;i< userList.size(); i++){
-			 AdminUser adminUser = userList.get(i);
-
-			 s+=adminUser.toString();
-		 }
 		
-		return s;
+		return userList;
 	}
 
 }
