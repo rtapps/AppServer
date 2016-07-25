@@ -43,7 +43,7 @@ public class MessagesController {
 			Model model) {
 		
 		 List<Message> messageList = messageRepository.findByApplicationIdAndLastUpdateDateGreaterThanOrderByLastUpdateDateDesc(applicationId, fromTime);
-		 long lastUpdateTime = messageList.size() > 0? messageList.get(messageList.size()-1).getLastUpdateDate(): fromTime;
+		 long lastUpdateTime = messageList.size() > 0? messageList.get(0).getLastUpdateDate(): fromTime;
 		
 		return new MessageResponse(messageList, lastUpdateTime);
 	}
