@@ -11,13 +11,13 @@ public class AdminUser {
     private String firstName;
     private String lastName;
     private String buisnessName;
-    private String applicationId;
+    private int applicationId;
     private String username;
     private String password;
 
     public AdminUser() {}
 
-    public AdminUser(String firstName, String lastName, String buisnessName, String applicationId, String username, String password) {
+    public AdminUser(String firstName, String lastName, String buisnessName, int applicationId, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.buisnessName = buisnessName;
@@ -36,7 +36,7 @@ public class AdminUser {
     	return this.buisnessName;
     }
     
-    public String getApplicationId(){
+    public int getApplicationId(){
     	return this.applicationId;
     }
     public String getUsername(){

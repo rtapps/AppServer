@@ -13,7 +13,7 @@ public class SpringMongoConfig {
 
 	public @Bean
 	MongoDbFactory mongoDbFactory() throws Exception {
-		return new SimpleMongoDbFactory(new MongoClient("ec2-54-87-196-110.compute-1.amazonaws.com"), "rtapps");
+		return new SimpleMongoDbFactory(new MongoClient("54.175.240.176"), "rtapps");
 	}
 
 	public @Bean

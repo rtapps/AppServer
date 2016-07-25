@@ -5,7 +5,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import appserver.db.mongo.data.AdminUser;
 import appserver.db.mongo.repository.AdminUserRepository;
 
 @SpringBootApplication
