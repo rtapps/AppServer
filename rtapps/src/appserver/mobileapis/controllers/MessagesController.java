@@ -12,26 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import appserver.db.mongo.data.Message;
 import appserver.db.mongo.repository.MessageRepository;
+import appserver.mobileapis.controllers.data.MessageResponse;
 
 @Controller
 public class MessagesController {
 	
-	private static class MessageResponse {
-		private long lastUpdateTime;
-		private List<Message> messageList;
-		
-		public MessageResponse(List<Message> messageList, long lastUpdateTime){
-			this.lastUpdateTime = lastUpdateTime;
-			this.messageList = messageList;
-		}
-		public long getLastUpdateTime(){
-			return this.lastUpdateTime;
-		}
-		
-		public List<Message> getMessageList(){
-			return this.messageList;
-		}
-	}
 	
 	@Autowired MessageRepository messageRepository;
 	
@@ -47,5 +32,4 @@ public class MessagesController {
 		
 		return new MessageResponse(messageList, lastUpdateTime);
 	}
-
 }
