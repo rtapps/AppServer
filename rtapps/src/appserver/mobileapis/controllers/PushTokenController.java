@@ -17,7 +17,7 @@ public class PushTokenController {
 	
 	
 	@Autowired PushTokenRepository pushTokenRepository;
-	@RequestMapping(value = "/pushToken", method = RequestMethod.PUT)
+	@RequestMapping(value = "/pushToken", method = RequestMethod.POST)
 	@ResponseBody
 	public PushToken messages(
 			@RequestParam(value = "applicationId", required = true) String applicationId,
