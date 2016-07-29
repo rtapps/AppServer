@@ -23,6 +23,7 @@ public class PushTokenController {
 			@RequestParam(value = "pushToken", required = true) String pushTokenStr,
 			@RequestParam(value = "pushTokenId", required = false) String pushTokenId,
 			@RequestParam(value = "osType", required = true) String osType,
+			@RequestParam(value = "deviceModelType", required = true) String deviceModelType,
 			Model model) {
 
 		PushToken pushToken = null;
@@ -33,7 +34,10 @@ public class PushTokenController {
 			}
 		}
 		if (pushToken == null){
-			pushToken = new PushToken(applicationId, pushTokenStr, osType);
+			pushToken = pushTokenRepository.findByPushToken(pushTokenStr);
+			if (pushToken == null) {
+				pushToken = new PushToken(applicationId, pushTokenStr, osType, deviceModelType);
+			}
 		}
 		pushTokenRepository.save(pushToken);
 

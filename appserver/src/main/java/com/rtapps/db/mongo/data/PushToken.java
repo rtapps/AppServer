@@ -11,10 +11,13 @@ public class PushToken {
 
 	private String os;
 
-	public PushToken(String applicationId, String pushToken, String os){
+	private String deviceModelType;
+
+	public PushToken(String applicationId, String pushToken, String os, String deviceModelType){
 		this.applicationId = applicationId;
 		this.pushToken = pushToken;
 		this.os = os;
+		this.deviceModelType = deviceModelType;
 	}
 
 	public String getApplicationId(){
@@ -35,5 +38,9 @@ public class PushToken {
 
 	public String getOs(){
 		return this.os;
+	}
+
+	public String getDeviceModelType(){
+		return this.deviceModelType;
 	}
 }
