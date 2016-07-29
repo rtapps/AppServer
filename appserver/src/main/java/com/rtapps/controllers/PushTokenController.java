@@ -22,17 +22,18 @@ public class PushTokenController {
 			@RequestParam(value = "applicationId", required = true) String applicationId,
 			@RequestParam(value = "pushToken", required = true) String pushTokenStr,
 			@RequestParam(value = "pushTokenId", required = false) String pushTokenId,
+			@RequestParam(value = "osType", required = true) String osType,
 			Model model) {
 
 		PushToken pushToken = null;
 		if (pushTokenId != null){
 			pushToken = pushTokenRepository.findByIdAndApplicationId(pushTokenId, applicationId);
-			if (pushTokenId != null){
+			if (pushTokenId != null && pushToken != null){
 				pushToken.setPushToken(pushTokenStr);
 			}
 		}
 		if (pushToken == null){
-			pushToken = new PushToken(applicationId, pushTokenStr);
+			pushToken = new PushToken(applicationId, pushTokenStr, osType);
 		}
 		pushTokenRepository.save(pushToken);
 

@@ -9,9 +9,12 @@ public class PushToken {
 	private String applicationId;
 	private String pushToken;
 
-	public PushToken(String applicationId, String pushToken){
+	private String os;
+
+	public PushToken(String applicationId, String pushToken, String os){
 		this.applicationId = applicationId;
 		this.pushToken = pushToken;
+		this.os = os;
 	}
 
 	public String getApplicationId(){
@@ -28,5 +31,9 @@ public class PushToken {
 
 	public void setPushToken(String pushToken){
 		this.pushToken = pushToken;
+	}
+
+	public String getOs(){
+		return this.os;
 	}
 }
