@@ -1,8 +1,11 @@
 package com.rtapps.controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.rtapps.aws.S3Wrapper;
 import com.rtapps.db.mongo.data.AdminUser;
 import com.rtapps.db.mongo.data.PushToken;
 import com.rtapps.db.mongo.repository.AdminUserRepository;
@@ -62,6 +65,15 @@ public class TestController {
 
 		return "";
 
+	}
+
+	@Autowired
+	private S3Wrapper s3Wrapper;
+
+	@RequestMapping(value = "/testList", method = RequestMethod.GET)
+	@ResponseBody
+	public List<S3ObjectSummary> list() throws IOException {
+		return s3Wrapper.list();
 	}
 
 }

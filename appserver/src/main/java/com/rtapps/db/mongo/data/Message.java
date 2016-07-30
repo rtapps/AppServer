@@ -10,16 +10,19 @@ public class Message {
 	private String applicationId;
 	private String header;
 	private String body;
-	private String fileUrl;
+	private String fileServerHost;
+	private String fileName;
 	private long creationDate;
 	private long lastUpdateDate;
 	private boolean isExists;
 
-	public Message (String applicationId, String header, String body, String fileUrl, long creationDate, long lastUpdateDate, boolean isExists){
+
+	public Message (String applicationId, String header, String body, String fileServerHost, String fileName, long creationDate, long lastUpdateDate, boolean isExists){
 		this.applicationId = applicationId;
 		this.header = header;
 		this.body = body;
-		this.fileUrl = fileUrl;
+		this.fileServerHost = fileServerHost;
+		this.fileName = fileName;
 		this.creationDate = creationDate;
 		this.lastUpdateDate = lastUpdateDate;
 		this.isExists = isExists;
@@ -37,9 +40,11 @@ public class Message {
 		return this.body;
 	}
 
-	public String getFileUrl(){
-		return this.fileUrl;
+	public String getFileServerHost(){
+		return this.fileServerHost;
 	}
+
+	public String getFileName(){return this.fileName;}
 
 	public long getLastUpdateDate(){
 		return this.lastUpdateDate;

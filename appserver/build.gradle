@@ -20,6 +20,10 @@ springBoot {
 	executable = true
 }
 
+project.ext {
+	springCloudVersion = '1.0.2.RELEASE'
+}
+
 jar {
 	baseName = 'appserver'
 	version = '0.0.1-SNAPSHOT'
@@ -38,6 +42,10 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-data-mongodb")
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	compile group: 'com.ganyo', name: 'gcm-server', version: '1.0.2'
+
+	compile("org.springframework.cloud:spring-cloud-aws-context:${springCloudVersion}")
+	compile("commons-io:commons-io:2.4")
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
