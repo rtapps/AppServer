@@ -16,5 +16,7 @@ public interface PushTokenRepository extends MongoRepository <PushToken, String>
 
 	public List<PushToken> findByApplicationId(String applicationId);
 
+	public Long deleteByPushToken(String pushToken);
+
 }
 

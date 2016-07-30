@@ -30,6 +30,9 @@ public class TestController {
 	@Autowired
 	AdminUserRepository adminUserReposiroty;
 
+	@Autowired
+	PushTokenRepository pushTokenRepository;
+
 	@RequestMapping("/test")
 	@ResponseBody
 	public List<AdminUser> test(@RequestParam(value = "name", required = false, defaultValue = "World") String name,
@@ -40,9 +43,6 @@ public class TestController {
 		return userList;
 	}
 
-	@Autowired
-	PushTokenRepository pushTokenRepository;
-
 	@RequestMapping(value = "/testSendPush", method = RequestMethod.POST)
 	@ResponseBody
 	public String messages(
@@ -52,16 +52,10 @@ public class TestController {
 
 
 		List<PushToken> pushTokens = pushTokenRepository.findByApplicationId(applicationId);
-		ArrayList<String> tokenIds = new ArrayList<>();
-
-		for (PushToken pushToken : pushTokens){
-			tokenIds.add(pushToken.getPushToken());
-		}
+		AdminUser adminUser = adminUserReposiroty.findByApplicationId(applicationId);
 		GCMNotificationService gcmNotificationService = new GCMNotificationService();
 
-		AdminUser adminUser = adminUserReposiroty.findByApplicationId(applicationId);
-
-		gcmNotificationService.pushNotificationToGCM(adminUser.getGoogleApiKey(), tokenIds, message);
+		gcmNotificationService.sendAsyncPushNotification(adminUser, pushTokens, message, pushTokenRepository);
 
 		return "";
 

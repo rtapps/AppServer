@@ -6,8 +6,13 @@ import java.util.List;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.rtapps.aws.S3Wrapper;
 import com.rtapps.controllers.webdata.MessageResponse;
+import com.rtapps.db.mongo.data.AdminUser;
 import com.rtapps.db.mongo.data.Message;
+import com.rtapps.db.mongo.data.PushToken;
+import com.rtapps.db.mongo.repository.AdminUserRepository;
 import com.rtapps.db.mongo.repository.MessageRepository;
+import com.rtapps.db.mongo.repository.PushTokenRepository;
+import com.rtapps.gcm.GCMNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,6 +29,12 @@ public class MessagesController {
 
 	@Autowired
 	MessageRepository messageRepository;
+
+	@Autowired
+	AdminUserRepository adminUserReposiroty;
+
+	@Autowired
+	PushTokenRepository pushTokenRepository;
 
 	@Autowired
 	private S3Wrapper s3Wrapper;
@@ -60,6 +71,7 @@ public class MessagesController {
 			@RequestParam(value = "applicationId", required = true) String applicationId,
 			@RequestParam(value = "messageHeader", required = true) String messageHeader,
 			@RequestParam(value = "messageBody", required = true) String messageBody,
+			@RequestParam(value = "sendPush", required = false) boolean sendPush,
 			@RequestParam(value = "file", required = true) MultipartFile[] multipartFiles) {
 
 		if (multipartFiles.length == 0){
@@ -77,8 +89,15 @@ public class MessagesController {
 		Message message = new Message(applicationId, messageHeader, messageBody, myFileServerPath, multipartFiles[0].getOriginalFilename(), now, now, true);
 		message = messageRepository.save(message);
 
-		List<PutObjectResult> uploadResults = s3Wrapper.upload(multipartFiles, "images/" + applicationId + "/" + message.getId() + "/");
+		s3Wrapper.upload(multipartFiles, "images/" + applicationId + "/" + message.getId() + "/");
 
+		if (sendPush){
+			List<PushToken> pushTokens = pushTokenRepository.findByApplicationId(applicationId);
+			AdminUser adminUser = adminUserReposiroty.findByApplicationId(applicationId);
+			GCMNotificationService gcmNotificationService = new GCMNotificationService();
+
+			gcmNotificationService.sendAsyncPushNotification(adminUser, pushTokens, messageHeader, pushTokenRepository);
+		}
 
 		return message;
 	}
