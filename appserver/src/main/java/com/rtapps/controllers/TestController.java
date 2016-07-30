@@ -56,7 +56,9 @@ public class TestController {
 		}
 		GCMNotificationService gcmNotificationService = new GCMNotificationService();
 
-		gcmNotificationService.pushNotificationToGCM(tokenIds, message);
+		AdminUser adminUser = adminUserReposiroty.findByApplicationId(applicationId);
+
+		gcmNotificationService.pushNotificationToGCM(adminUser.getGoogleApiKey(), tokenIds, message);
 
 		return "";
 

@@ -14,16 +14,18 @@ public class AdminUser {
 	private int applicationId;
 	private String username;
 	private String password;
+	private String googleApiKey;
 
 	public AdminUser() {}
 
-	public AdminUser(String firstName, String lastName, String buisnessName, int applicationId, String username, String password) {
+	public AdminUser(String firstName, String lastName, String buisnessName, int applicationId, String username, String password, String googleApiKey) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.buisnessName = buisnessName;
 		this.applicationId = applicationId;
 		this.username = username;
 		this.password = password;
+		this.googleApiKey = googleApiKey;
 	}
 
 	public String getFirstName(){
@@ -54,4 +56,11 @@ public class AdminUser {
 				id, firstName, lastName, buisnessName, applicationId, username, password);
 	}
 
+	public String getGoogleApiKey() {
+		return this.googleApiKey;
+	}
+
+	public void setGoogleApiKey(String googleApiKey) {
+		this.googleApiKey = googleApiKey;
+	}
 }

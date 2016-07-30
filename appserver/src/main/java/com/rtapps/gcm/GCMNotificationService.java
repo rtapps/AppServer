@@ -13,36 +13,28 @@ import java.util.List;
 @Service
 public class GCMNotificationService {
 
-	final String GCM_API_KEY = "AIzaSyBkn3RG7Cv7j_edkYw5ohf7Y0WvuS3tX3Y";
-
-	public boolean pushNotificationToGCM(List<String> gcmRegId,String message){
+	public void pushNotificationToGCM(String googleApiKey, List<String> gcmRegId,String message){
 
 		final int retries = 3;
-		Sender sender = new Sender(GCM_API_KEY);
+		Sender sender = new Sender(googleApiKey);
 		Message msg = new Message.Builder().addData("message",message).build();
 
 
 		try {
-			Result result = sender.send(msg, gcmRegId.get(0), retries);
-			/**
-			 * if you want to send to multiple then use below method
-			 * send(Message message, List<String> regIds, int retries)
-			 **/
+			MulticastResult results = sender.send(msg, gcmRegId, retries);
 
-
-			if (StringUtils.isEmpty(result.getErrorCodeName())) {
-				System.out.println("GCM Notification is sent successfully" + result.toString());
-				return true;
+			for (Result result: results.getResults()){
+				if (StringUtils.isEmpty(result.getErrorCodeName())) {
+					System.out.println("GCM Notification is sent successfully" + result.toString());
+				}
+				else{
+					System.out.println("Error occurred while sending push notification :" + result.getErrorCodeName());
+				}
 			}
-
-			System.out.println("Error occurred while sending push notification :" + result.getErrorCodeName());
-
 		} catch (InvalidRequestException e) {
 			System.out.println("Invalid Request");
 		} catch (IOException e) {
 			System.out.println("IO Exception");
 		}
-		return false;
-
 	}
 }
