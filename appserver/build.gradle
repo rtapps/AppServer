@@ -37,6 +37,7 @@ dependencies {
 	compile group: 'org.mongodb', name: 'mongo-java-driver'
 	compile("org.springframework.boot:spring-boot-starter-data-mongodb")
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+	compile group: 'com.ganyo', name: 'gcm-server', version: '1.0.2'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
