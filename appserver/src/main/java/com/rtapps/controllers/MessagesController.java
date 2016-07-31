@@ -13,6 +13,7 @@ import com.rtapps.db.mongo.repository.AdminUserRepository;
 import com.rtapps.db.mongo.repository.MessageRepository;
 import com.rtapps.db.mongo.repository.PushTokenRepository;
 import com.rtapps.gcm.GCMNotificationService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -65,6 +66,23 @@ public class MessagesController {
 		return new MessageResponse(messageList, lastUpdateTime);
 	}
 
+	@RequestMapping(value = "/deleteMessage", method = RequestMethod.POST)
+	@ResponseBody
+	public Message deleteMessage(
+			@RequestParam(value = "applicationId", required = true) String applicationId,
+			@RequestParam(value = "messageId", required = true) String messageId){
+
+		Message message = messageRepository.findAndRemoveByApplicationIdAndId(applicationId, messageId);
+
+		if (message != null)
+		{
+			String fileName = "images/" + applicationId + "/" + message.getId() + "/" + message.getFileName();
+			s3Wrapper.delete(fileName);
+		}
+
+		return message;
+	}
+
 	@RequestMapping(value = "/putMessage", method = RequestMethod.POST)
 	@ResponseBody
 	public Message putMessage(
@@ -86,10 +104,13 @@ public class MessagesController {
 
 		Date date = new Date();
 		long now = date.getTime();
-		Message message = new Message(applicationId, messageHeader, messageBody, myFileServerPath, multipartFiles[0].getOriginalFilename(), now, now, true);
-		message = messageRepository.save(message);
+		ObjectId objectId = new ObjectId();
 
-		s3Wrapper.upload(multipartFiles, "images/" + applicationId + "/" + message.getId() + "/");
+		Message message = new Message(objectId.toHexString(), applicationId, messageHeader, messageBody, myFileServerPath, multipartFiles[0].getOriginalFilename(), now, now, true);
+
+		List<PutObjectResult> putObjectResults = s3Wrapper.upload(multipartFiles, "images/" + applicationId + "/" + message.getId() + "/");
+
+		message = messageRepository.save(message);
 
 		if (sendPush){
 			List<PushToken> pushTokens = pushTokenRepository.findByApplicationId(applicationId);

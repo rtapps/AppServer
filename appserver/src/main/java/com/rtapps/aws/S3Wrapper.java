@@ -89,4 +89,8 @@ public class S3Wrapper {
 
 		return s3ObjectSummaries;
 	}
+
+	public void delete(String fileName){
+		amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
+	}
 }

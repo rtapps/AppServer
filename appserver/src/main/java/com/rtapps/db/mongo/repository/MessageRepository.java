@@ -11,4 +11,6 @@ public interface MessageRepository extends MongoRepository<Message, String> {
 
 	public List<Message> findByApplicationIdAndLastUpdateDateGreaterThanOrderByLastUpdateDateDesc(String applicationId, long lastUpdateDate);
 
+	public Message findAndRemoveByApplicationIdAndId(String applicationId, String id);
+
 }

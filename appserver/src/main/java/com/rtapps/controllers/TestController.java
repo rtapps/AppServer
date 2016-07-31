@@ -11,6 +11,7 @@ import com.rtapps.db.mongo.data.PushToken;
 import com.rtapps.db.mongo.repository.AdminUserRepository;
 import com.rtapps.db.mongo.repository.PushTokenRepository;
 import com.rtapps.gcm.GCMNotificationService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,6 +68,9 @@ public class TestController {
 	@RequestMapping(value = "/testList", method = RequestMethod.GET)
 	@ResponseBody
 	public List<S3ObjectSummary> list() throws IOException {
+		ObjectId id1 = new ObjectId();
+		ObjectId id2 = new ObjectId();
+
 		return s3Wrapper.list();
 	}
 

@@ -17,7 +17,8 @@ public class Message {
 	private boolean isExists;
 
 
-	public Message (String applicationId, String header, String body, String fileServerHost, String fileName, long creationDate, long lastUpdateDate, boolean isExists){
+	public Message (String id, String applicationId, String header, String body, String fileServerHost, String fileName, long creationDate, long lastUpdateDate, boolean isExists){
+		this.id = id;
 		this.applicationId = applicationId;
 		this.header = header;
 		this.body = body;
