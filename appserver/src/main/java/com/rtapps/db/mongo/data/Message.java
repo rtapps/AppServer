@@ -14,10 +14,10 @@ public class Message {
 	private String fileName;
 	private long creationDate;
 	private long lastUpdateDate;
-	private boolean isExists;
+	private boolean exists;
 
 
-	public Message (String id, String applicationId, String header, String body, String fileServerHost, String fileName, long creationDate, long lastUpdateDate, boolean isExists){
+	public Message (String id, String applicationId, String header, String body, String fileServerHost, String fileName, long creationDate, long lastUpdateDate, boolean exists){
 		this.id = id;
 		this.applicationId = applicationId;
 		this.header = header;
@@ -26,7 +26,7 @@ public class Message {
 		this.fileName = fileName;
 		this.creationDate = creationDate;
 		this.lastUpdateDate = lastUpdateDate;
-		this.isExists = isExists;
+		this.exists = exists;
 	}
 
 	public String getApplicationId(){
@@ -52,7 +52,11 @@ public class Message {
 	}
 
 	public boolean isExists(){
-		return this.isExists;
+		return this.exists;
+	}
+
+	public void setExists(boolean exists){
+		this.exists = exists;
 	}
 
 	public String getId(){

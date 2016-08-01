@@ -72,7 +72,9 @@ public class MessagesController {
 			@RequestParam(value = "applicationId", required = true) String applicationId,
 			@RequestParam(value = "messageId", required = true) String messageId){
 
-		Message message = messageRepository.findAndRemoveByApplicationIdAndId(applicationId, messageId);
+		Message message = messageRepository.findByApplicationIdAndId(applicationId, messageId);
+		message.setExists(false);
+		messageRepository.save(message);
 
 		if (message != null)
 		{
