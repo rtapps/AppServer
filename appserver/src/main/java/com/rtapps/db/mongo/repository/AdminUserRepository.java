@@ -11,5 +11,7 @@ public interface AdminUserRepository extends MongoRepository<AdminUser, String> 
 
 	public List<AdminUser> findByFirstName(String firstName);
 	public List<AdminUser> findByLastName(String lastName);
+
+	public AdminUser findByUsername(String username);
 	AdminUser findByApplicationId(String applicationId);
 }

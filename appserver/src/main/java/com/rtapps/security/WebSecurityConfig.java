@@ -12,10 +12,18 @@ package com.rtapps.security;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth
+//                .inMemoryAuthentication()
+//                .withUser("foo").password("foosecret").roles("USER");
+//    }
+
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .inMemoryAuthentication()
-                .withUser("foo").password("foosecret").roles("USER");
+    AdminUserDetailsService adminUserDetailsService ;
+
+    @Autowired
+    public void configAuthBuilder(AuthenticationManagerBuilder builder) throws Exception {
+        builder.userDetailsService(adminUserDetailsService);
     }
 }
