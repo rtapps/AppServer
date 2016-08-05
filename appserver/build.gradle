@@ -46,7 +46,16 @@ dependencies {
 	compile("org.springframework.cloud:spring-cloud-aws-context:${springCloudVersion}")
 	compile("commons-io:commons-io:2.4")
 
+	compile("org.springframework.boot:spring-boot-starter-security")
+	compile('org.springframework.cloud:spring-cloud-starter-oauth2')
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR4"
+	}
 }
 
 
