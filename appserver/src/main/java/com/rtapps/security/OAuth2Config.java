@@ -16,6 +16,9 @@ import java.security.Principal;
 @EnableAuthorizationServer
 @RestController
 public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
+
+	private static int NUMBER_OF_SECONDS_IN_A_WEEK = 604800;
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -27,8 +30,12 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
-		clients.inMemory().withClient("app").secret("appsecret")
-				.authorizedGrantTypes("authorization_code", "refresh_token", "password").scopes("openid");
+		clients.inMemory()
+				.withClient("app")
+				.secret("appsecret")
+				.authorizedGrantTypes("authorization_code", "refresh_token", "password")
+				.scopes("openid")
+				.accessTokenValiditySeconds(NUMBER_OF_SECONDS_IN_A_WEEK);
 	}
 
 
