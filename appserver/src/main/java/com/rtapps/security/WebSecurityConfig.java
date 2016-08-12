@@ -11,14 +11,6 @@ package com.rtapps.security;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .inMemoryAuthentication()
-//                .withUser("foo").password("foosecret").roles("USER");
-//    }
-
     @Autowired
     AdminUserDetailsService adminUserDetailsService ;
 
