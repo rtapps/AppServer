@@ -85,32 +85,39 @@ public class MessagesController {
 		return message;
 	}
 
-	@RequestMapping(value = "/putMessage", method = RequestMethod.POST)
-	@ResponseBody
-	public Message putMessage(
-			@RequestParam(value = "applicationId", required = true) String applicationId,
-			@RequestParam(value = "messageHeader", required = true) String messageHeader,
-			@RequestParam(value = "messageBody", required = true) String messageBody,
-			@RequestParam(value = "sendPush", required = false) boolean sendPush,
-			@RequestParam(value = "file", required = true) MultipartFile[] multipartFiles) {
-
-		if (multipartFiles.length == 0){
-			throw new FileEmptyTypeException();
-		}
-
+	private void validateImage(MultipartFile[] multipartFiles){
 		for (int i=0;i<multipartFiles.length;i++){
 			if (!multipartFiles[i].getContentType().contains("image")){
 				throw new WrongFileTypeException();
 			}
 		}
+	}
+
+	@RequestMapping(value = "/putMessage", method = RequestMethod.POST)
+	@ResponseBody
+	public Message putMessage(
+			@RequestParam(value = "applicationId") String applicationId,
+			@RequestParam(value = "messageHeader") String messageHeader,
+			@RequestParam(value = "messageBody") String messageBody,
+			@RequestParam(value = "sendPush", required = false) boolean sendPush,
+			@RequestParam(value = "fullImage") MultipartFile[] fullImage,
+			@RequestParam(value = "previewImage") MultipartFile[] previewImage) {
+
+		if (fullImage.length == 0 || previewImage.length == 0){
+			throw new FileEmptyTypeException();
+		}
+
+		validateImage(fullImage);
+		validateImage(previewImage);
 
 		Date date = new Date();
 		long now = date.getTime();
 		ObjectId objectId = new ObjectId();
 
-		Message message = new Message(objectId.toHexString(), applicationId, messageHeader, messageBody, myFileServerPath, multipartFiles[0].getOriginalFilename(), now, now, true);
+		Message message = new Message(objectId.toHexString(), applicationId, messageHeader, messageBody, myFileServerPath, fullImage[0].getOriginalFilename(), now, now, true);
 
-		List<PutObjectResult> putObjectResults = s3Wrapper.upload(multipartFiles, "images/" + applicationId + "/" + message.getId() + "/");
+		s3Wrapper.upload(fullImage, "images/" + applicationId + "/" + message.getId() + "/");
+		s3Wrapper.upload(previewImage, "images/" + applicationId + "/" + message.getId() + "/preview/");
 
 		message = messageRepository.save(message);
 
