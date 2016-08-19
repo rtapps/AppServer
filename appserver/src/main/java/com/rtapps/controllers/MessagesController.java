@@ -3,7 +3,6 @@ package com.rtapps.controllers;
 import java.util.Date;
 import java.util.List;
 
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.rtapps.aws.S3Wrapper;
 import com.rtapps.controllers.webdata.MessageResponse;
 import com.rtapps.db.mongo.data.AdminUser;
@@ -21,8 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.activation.MimetypesFileTypeMap;
 
 
 @Controller
@@ -78,19 +75,11 @@ public class MessagesController {
 
 		if (message != null)
 		{
-			String fileName = "images/" + applicationId + "/" + message.getId() + "/" + message.getFileName();
+			String fileName = "images/" + applicationId + "/" + message.getId() + "/" + message.getFullImageName();
 			s3Wrapper.delete(fileName);
 		}
 
 		return message;
-	}
-
-	private void validateImage(MultipartFile[] multipartFiles){
-		for (int i=0;i<multipartFiles.length;i++){
-			if (!multipartFiles[i].getContentType().contains("image")){
-				throw new WrongFileTypeException();
-			}
-		}
 	}
 
 	@RequestMapping(value = "/putMessage", method = RequestMethod.POST)
@@ -107,17 +96,14 @@ public class MessagesController {
 			throw new FileEmptyTypeException();
 		}
 
-		validateImage(fullImage);
-		validateImage(previewImage);
-
 		Date date = new Date();
 		long now = date.getTime();
 		ObjectId objectId = new ObjectId();
 
-		Message message = new Message(objectId.toHexString(), applicationId, messageHeader, messageBody, myFileServerPath, fullImage[0].getOriginalFilename(), now, now, true);
+		Message message = new Message(objectId.toHexString(), applicationId, messageHeader, messageBody, myFileServerPath, fullImage[0].getOriginalFilename(), previewImage[0].getOriginalFilename(), now, now, true);
 
 		s3Wrapper.upload(fullImage, "images/" + applicationId + "/" + message.getId() + "/");
-		s3Wrapper.upload(previewImage, "images/" + applicationId + "/" + message.getId() + "/preview/");
+		s3Wrapper.upload(previewImage, "images/" + applicationId + "/" + message.getId() + "/");
 
 		message = messageRepository.save(message);
 

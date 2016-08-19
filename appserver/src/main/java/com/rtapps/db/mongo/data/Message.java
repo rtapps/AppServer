@@ -11,19 +11,21 @@ public class Message {
 	private String header;
 	private String body;
 	private String fileServerHost;
-	private String fileName;
+	private String fullImageName;
+	private String previewImageName;
 	private long creationDate;
 	private long lastUpdateDate;
 	private boolean exists;
 
 
-	public Message (String id, String applicationId, String header, String body, String fileServerHost, String fileName, long creationDate, long lastUpdateDate, boolean exists){
+	public Message (String id, String applicationId, String header, String body, String fileServerHost, String fullImageName, String previewImageName, long creationDate, long lastUpdateDate, boolean exists){
 		this.id = id;
 		this.applicationId = applicationId;
 		this.header = header;
 		this.body = body;
 		this.fileServerHost = fileServerHost;
-		this.fileName = fileName;
+		this.fullImageName = fullImageName;
+		this.previewImageName = previewImageName;
 		this.creationDate = creationDate;
 		this.lastUpdateDate = lastUpdateDate;
 		this.exists = exists;
@@ -45,7 +47,7 @@ public class Message {
 		return this.fileServerHost;
 	}
 
-	public String getFileName(){return this.fileName;}
+	public String getFullImageName(){return this.fullImageName;}
 
 	public long getLastUpdateDate(){
 		return this.lastUpdateDate;
@@ -64,6 +66,10 @@ public class Message {
 	}
 
 	public long getCreationDate(){return this.creationDate;}
+
+	public String getPreviewImageName(){
+		return this.previewImageName;
+	}
 
 }
 
