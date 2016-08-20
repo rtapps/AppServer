@@ -11,14 +11,14 @@ public class AdminUser {
 	private String firstName;
 	private String lastName;
 	private String buisnessName;
-	private int applicationId;
+	private String applicationId;
 	private String username;
 	private String password;
 	private String googleApiKey;
 
 	public AdminUser() {}
 
-	public AdminUser(String firstName, String lastName, String buisnessName, int applicationId, String username, String password, String googleApiKey) {
+	public AdminUser(String firstName, String lastName, String buisnessName, String applicationId, String username, String password, String googleApiKey) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.buisnessName = buisnessName;
@@ -38,7 +38,7 @@ public class AdminUser {
 		return this.buisnessName;
 	}
 
-	public int getApplicationId(){
+	public String getApplicationId(){
 		return this.applicationId;
 	}
 	public String getUsername(){

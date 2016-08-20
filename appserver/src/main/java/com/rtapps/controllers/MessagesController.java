@@ -80,8 +80,10 @@ public class MessagesController {
 
 		if (message != null)
 		{
-			String fileName = "images/" + applicationId + "/" + message.getId() + "/" + message.getFullImageName();
-			s3Wrapper.delete(fileName);
+			String fullImageName = "images/" + applicationId + "/" + message.getId() + "/" + message.getFullImageName();
+			s3Wrapper.delete(fullImageName);
+			String previewImageName = "images/" + applicationId + "/" + message.getId() + "/" + message.getPreviewImageName();
+			s3Wrapper.delete(previewImageName);
 		}
 
 		return message;

@@ -11,7 +11,7 @@ public class AdminUserData {
     private String firstName;
     private String lastName;
     private String buisnessName;
-    private int applicationId;
+    private String applicationId;
     private String username;
 
     public AdminUserData(AdminUser adminUser){
@@ -32,7 +32,7 @@ public class AdminUserData {
         return this.buisnessName;
     }
 
-    public int getApplicationId(){
+    public String getApplicationId(){
         return this.applicationId;
     }
     public String getUsername(){
