@@ -16,11 +16,14 @@ public class CatalogImage {
 
 	private String fullImageName;
 
-	public CatalogImage(String id, String applicationId, String fileServerHost, String fullImageName){
+	private int index;
+
+	public CatalogImage(String id, String applicationId, String fileServerHost, String fullImageName, int index){
 		this.id = id;
 		this.applicationId = applicationId;
 		this.fileServerHost = fileServerHost;
 		this.fullImageName = fullImageName;
+		this.index = index;
 	}
 
 	public String getId(){
@@ -37,5 +40,9 @@ public class CatalogImage {
 
 	public String getFullImageName(){
 		return this.fullImageName;
+	}
+
+	public void setIndex(int index){
+		this.index = index;
 	}
 }
