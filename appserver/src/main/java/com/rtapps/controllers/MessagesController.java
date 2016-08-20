@@ -71,6 +71,11 @@ public class MessagesController {
 
 		Message message = messageRepository.findByApplicationIdAndId(applicationId, messageId);
 		message.setExists(false);
+
+		Date date = new Date();
+		long now = date.getTime();
+
+		message.setLastUpdateDate(now);
 		messageRepository.save(message);
 
 		if (message != null)

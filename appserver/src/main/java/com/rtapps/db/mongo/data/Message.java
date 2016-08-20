@@ -71,6 +71,10 @@ public class Message {
 		return this.previewImageName;
 	}
 
+	public void setLastUpdateDate(long lastUpdateDate){
+		this.lastUpdateDate = lastUpdateDate;
+	}
+
 }
 
 /*
