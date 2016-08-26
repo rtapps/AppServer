@@ -130,8 +130,8 @@ public class CatalogController {
 	@ResponseBody
 	public List<CatalogImage> updateCatalog(
 			@RequestParam(value = "applicationId") String applicationId,
-			@RequestParam(value = "newCatalogImages") List<NewCatalogImage> newCatalogImages,
-			@RequestParam(value = "existingCatalogImages") List<ExistingCatalogImage> exitingCatalogImages){
+			@RequestParam(value = "newCatalogImages", required = false) List<NewCatalogImage> newCatalogImages,
+			@RequestParam(value = "existingCatalogImages", required = false) List<ExistingCatalogImage> exitingCatalogImages){
 
 		cleanRemovedCatalogImages(applicationId, exitingCatalogImages);
 
