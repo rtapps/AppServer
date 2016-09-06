@@ -47,20 +47,16 @@ public class S3Wrapper {
 		return putObjectResult;
 	}
 
-	public List<PutObjectResult> upload(MultipartFile[] multipartFiles, String fileName) {
-		List<PutObjectResult> putObjectResults = new ArrayList<>();
+	public PutObjectResult upload(MultipartFile multipartFile, String fileName) {
+		PutObjectResult putObjectResult = null;
 
-		Arrays.stream(multipartFiles)
-				.filter(multipartFile -> !StringUtils.isEmpty(multipartFile.getOriginalFilename()))
-				.forEach(multipartFile -> {
-					try {
-						putObjectResults.add(upload(multipartFile.getInputStream(), fileName + multipartFile.getOriginalFilename()));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				});
+		try {
+			putObjectResult = upload(multipartFile.getInputStream(), fileName + multipartFile.getOriginalFilename());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		return putObjectResults;
+		return putObjectResult;
 	}
 
 	public ResponseEntity<byte[]> download(String key) throws IOException {

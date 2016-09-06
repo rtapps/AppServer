@@ -50,6 +50,8 @@ dependencies {
 	compile('org.springframework.cloud:spring-cloud-starter-oauth2')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	// https://mvnrepository.com/artifact/org.springframework/spring-webmvc
+	compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.2.RELEASE'
 }
 
 dependencyManagement {

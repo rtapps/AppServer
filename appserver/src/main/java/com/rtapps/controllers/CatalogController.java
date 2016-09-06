@@ -1,10 +1,13 @@
 package com.rtapps.controllers;
 
 import com.rtapps.aws.S3Wrapper;
+import com.rtapps.controllers.CatalogController.ExistingCatalogImages.ExistingCatalogImage;
 import com.rtapps.db.mongo.data.CatalogImage;
 import com.rtapps.db.mongo.repository.AdminUserRepository;
 import com.rtapps.db.mongo.repository.CatalogImageRepository;
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -35,9 +39,9 @@ public class CatalogController {
 	@Value("${cloud.aws.s3.myFileServerPath}")
 	private String myFileServerPath;
 
-	private CatalogImage addCatalogImage(String applicationId, MultipartFile[] fullImage, int index){
+	private CatalogImage addCatalogImage(String applicationId, MultipartFile fullImage, int index){
 		ObjectId objectId = new ObjectId();
-		CatalogImage catalogImage = new CatalogImage(objectId.toHexString(), applicationId, myFileServerPath, fullImage[0].getOriginalFilename(), index);
+		CatalogImage catalogImage = new CatalogImage(objectId.toHexString(), applicationId, myFileServerPath, fullImage.getOriginalFilename(), index);
 
 		s3Wrapper.upload(fullImage, "images/" + applicationId + "/" + catalogImage.getId() + "/");
 
@@ -56,10 +60,10 @@ public class CatalogController {
 	@ResponseBody
 	public CatalogImage putCatalogImage(
 			@RequestParam(value = "applicationId") String applicationId,
-			@RequestParam(value = "fullCatalogImage") MultipartFile[] fullImage,
+			@RequestParam(value = "fullCatalogImage") MultipartFile [] fullImage,
 			@RequestParam(value = "index") int index
 			){
-		return addCatalogImage(applicationId, fullImage, index);
+		return addCatalogImage(applicationId, fullImage[0], index);
 	}
 
 	@RequestMapping(value = "/deleteCatalogImage", method = RequestMethod.POST)
@@ -89,60 +93,88 @@ public class CatalogController {
 		return catalogImageList;
 	}
 
-	private static class NewCatalogImage{
+	public static class NewCatalogImages{
 		private int index;
-		private MultipartFile[] fullImage;
-
-		public NewCatalogImage(int index, MultipartFile [] fullImage){
-			this.index = index;
-			this.fullImage = fullImage;
-		}
-
 		public int getIndex(){
 			return this.index;
 		}
 
-		public MultipartFile[] getFullImage(){
-			return this.fullImage;
-		}
+        public void setIndex(int index){
+            this.index = index;
+        }
 	}
 
-	private static class ExistingCatalogImage{
-		private String id;
-		private int index;
+	public static class ExistingCatalogImages{
 
-		public ExistingCatalogImage(String id, int index){
-			this.id = id;
-			this.index = index;
-		}
+        public List<ExistingCatalogImage> getExistingCatalogImages(){
+            return this.existingCatalogImages;
+        }
 
-		public String getId(){
-			return this.id;
-		}
+        public void setExistingCatalogImages(List<ExistingCatalogImage> existingCatalogImages){
+            this.existingCatalogImages = existingCatalogImages;
+        }
 
-		public int getIndex(){
-			return this.index;
-		}
+        private List <ExistingCatalogImage> existingCatalogImages;
+
+        public static class ExistingCatalogImage
+
+        {
+            private String id;
+            private int index;
+
+            public String getId() {
+            return this.id;
+        }
+
+            public int getIndex() {
+                return this.index;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public void setIndex(int index) {
+                this.index = index;
+            }
+        }
 	}
 
 
 	@RequestMapping(value = "/updateCatalog", method = RequestMethod.POST)
 	@ResponseBody
-	public List<CatalogImage> updateCatalog(
+	public String updateCatalog(
 			@RequestParam(value = "applicationId") String applicationId,
-			@RequestParam(value = "newCatalogImages", required = false) List<NewCatalogImage> newCatalogImages,
-			@RequestParam(value = "existingCatalogImages", required = false) List<ExistingCatalogImage> exitingCatalogImages){
+			@RequestParam(value = "existingCatalogImages", required = false) String exitingCatalogImagesStr,
+			@RequestParam(value = "newCatalogImageIndexes", required = false) String newCatalogIndexesStr,
+			@RequestParam(value = "newCatalogImageFile1", required = false) MultipartFile newCatalogImageFile1,
+			@RequestParam(value = "newCatalogImageFile2", required = false) MultipartFile newCatalogImageFile2,
+			@RequestParam(value = "newCatalogImageFile3", required = false) MultipartFile newCatalogImageFile3,
+			@RequestParam(value = "newCatalogImageFile4", required = false) MultipartFile newCatalogImageFile4,
+			@RequestParam(value = "newCatalogImageFile5", required = false) MultipartFile newCatalogImageFile5,
+			@RequestParam(value = "newCatalogImageFile6", required = false) MultipartFile newCatalogImageFile6,
+			@RequestParam(value = "newCatalogImageFile7", required = false) MultipartFile newCatalogImageFile7
+	) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+		MultipartFile [] multipartFiles = new MultipartFile[]{newCatalogImageFile1, newCatalogImageFile2, newCatalogImageFile3, newCatalogImageFile4, newCatalogImageFile5, newCatalogImageFile6, newCatalogImageFile7};
+
+        List<ExistingCatalogImage> exitingCatalogImages = objectMapper.readValue(exitingCatalogImagesStr, ExistingCatalogImages.class).getExistingCatalogImages();
+
+		List<Integer> newCatalogIndexes = objectMapper.readValue(newCatalogIndexesStr, new TypeReference<List<Integer>>(){});
 
 		cleanRemovedCatalogImages(applicationId, exitingCatalogImages);
 
-		for (NewCatalogImage image: newCatalogImages){
-			addCatalogImage(applicationId, image.getFullImage(), image.getIndex());
+		for (int i=0; i< newCatalogIndexes.size(); i++){
+			addCatalogImage(applicationId, multipartFiles[i], newCatalogIndexes.get(i));
 		}
+
 
 		for (ExistingCatalogImage existingCatalogImage: exitingCatalogImages){
 			updateCatalogImageIndex(existingCatalogImage.getId(), applicationId, existingCatalogImage.getIndex());
 		}
-		return catalogImageRepository.findByApplicationId(applicationId);
+		return "";
 	}
 
 	private void cleanRemovedCatalogImages(String applicationId, List<ExistingCatalogImage> exitingCatalogImages) {
@@ -158,7 +190,7 @@ public class CatalogController {
 
 	private boolean stillExists(CatalogImage catalogImage, List<ExistingCatalogImage> exitingCatalogImages){
 		for (ExistingCatalogImage existingCatalogImage: exitingCatalogImages){
-			if (existingCatalogImage.getId() == catalogImage.getId()){
+			if (existingCatalogImage.getId().equals(catalogImage.getId())){
 				return true;
 			}
 		}
