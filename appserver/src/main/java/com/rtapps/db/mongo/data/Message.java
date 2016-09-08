@@ -9,6 +9,7 @@ public class Message {
 
 	private String applicationId;
 	private String header;
+	private String tag;
 	private String body;
 	private String fileServerHost;
 	private String fullImageName;
@@ -18,10 +19,11 @@ public class Message {
 	private boolean exists;
 
 
-	public Message (String id, String applicationId, String header, String body, String fileServerHost, String fullImageName, String previewImageName, long creationDate, long lastUpdateDate, boolean exists){
+	public Message (String id, String applicationId, String header, String tag, String body, String fileServerHost, String fullImageName, String previewImageName, long creationDate, long lastUpdateDate, boolean exists){
 		this.id = id;
 		this.applicationId = applicationId;
 		this.header = header;
+		this.tag = tag;
 		this.body = body;
 		this.fileServerHost = fileServerHost;
 		this.fullImageName = fullImageName;
@@ -29,6 +31,14 @@ public class Message {
 		this.creationDate = creationDate;
 		this.lastUpdateDate = lastUpdateDate;
 		this.exists = exists;
+	}
+
+	public String getTag(){
+		return this.tag;
+	}
+
+	public void setTag(String tag){
+		this.tag = tag;
 	}
 
 	public String getApplicationId(){

@@ -95,6 +95,7 @@ public class MessagesController {
 			@RequestParam(value = "applicationId") String applicationId,
 			@RequestParam(value = "messageHeader") String messageHeader,
 			@RequestParam(value = "messageBody") String messageBody,
+			@RequestParam(value = "messageTag") String messageTag,
 			@RequestParam(value = "sendPush", required = false) boolean sendPush,
 			@RequestParam(value = "fullImage") MultipartFile fullImage,
 			@RequestParam(value = "previewImage") MultipartFile previewImage) {
@@ -107,7 +108,7 @@ public class MessagesController {
 		long now = date.getTime();
 		ObjectId objectId = new ObjectId();
 
-		Message message = new Message(objectId.toHexString(), applicationId, messageHeader, messageBody, myFileServerPath, fullImage.getOriginalFilename(), previewImage.getOriginalFilename(), now, now, true);
+		Message message = new Message(objectId.toHexString(), applicationId, messageHeader, messageTag, messageBody, myFileServerPath, fullImage.getOriginalFilename(), previewImage.getOriginalFilename(), now, now, true);
 
 		s3Wrapper.upload(fullImage, "images/" + applicationId + "/" + message.getId() + "/");
 		s3Wrapper.upload(previewImage, "images/" + applicationId + "/" + message.getId() + "/");
