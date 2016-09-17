@@ -19,7 +19,7 @@ public class ResourceServerConfiguration extends
                 .anonymous()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/adminUser", "/putMessage", "/deleteMessage").authenticated()
+                .antMatchers("/adminUser", "/putMessage", "/deleteMessage", "/updateCatalog").authenticated()
                 ;
     }
 }

@@ -56,16 +56,6 @@ public class CatalogController {
 		return catalogImageRepository.save(catalogImage);
 	}
 
-	@RequestMapping(value = "/putCatalogImage", method = RequestMethod.POST)
-	@ResponseBody
-	public CatalogImage putCatalogImage(
-			@RequestParam(value = "applicationId") String applicationId,
-			@RequestParam(value = "fullCatalogImage") MultipartFile [] fullImage,
-			@RequestParam(value = "index") int index
-			){
-		return addCatalogImage(applicationId, fullImage[0], index);
-	}
-
 	@RequestMapping(value = "/deleteCatalogImage", method = RequestMethod.POST)
 	@ResponseBody
 	public CatalogImage deleteCatalogImage(
