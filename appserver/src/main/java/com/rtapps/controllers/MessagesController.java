@@ -3,6 +3,8 @@ package com.rtapps.controllers;
 import java.util.Date;
 import java.util.List;
 
+import com.amazonaws.util.json.Jackson;
+import com.mongodb.util.JSON;
 import com.rtapps.aws.S3Wrapper;
 import com.rtapps.controllers.webdata.MessageResponse;
 import com.rtapps.db.mongo.data.AdminUser;
@@ -13,9 +15,11 @@ import com.rtapps.db.mongo.repository.MessageRepository;
 import com.rtapps.db.mongo.repository.PushTokenRepository;
 import com.rtapps.gcm.GCMNotificationService;
 import org.bson.types.ObjectId;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -120,7 +124,11 @@ public class MessagesController {
 			AdminUser adminUser = adminUserReposiroty.findByApplicationId(applicationId);
 			GCMNotificationService gcmNotificationService = new GCMNotificationService();
 
-			gcmNotificationService.sendAsyncPushNotification(adminUser, pushTokens, messageHeader, pushTokenRepository);
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("id", message.getId());
+			jsonObject.put("header", message.getHeader());
+
+			gcmNotificationService.sendAsyncPushNotification(adminUser, pushTokens, jsonObject.toJSONString(), pushTokenRepository);
 		}
 
 		return message;
